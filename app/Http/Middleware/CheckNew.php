@@ -16,7 +16,8 @@ class CheckNew
      */
     public function handle($request, Closure $next)
     {
-       if (Auth::user()->new == 1) {
+        $checked = 1;
+        if (Auth::user()->new == $checked) {
             return $next($request);
         } else {
             return redirect()->route('changepassword', ['id' => Auth::user()->id]);

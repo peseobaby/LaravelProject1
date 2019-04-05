@@ -151,11 +151,12 @@ class HomeController extends Controller
 
     public function changePassword(passwordRequest $request, $id)
     {   
+        $checked = '1';
         $user = new User;
         $data = $request->all();
         $userid = $user->find($id);
         $userid->password = bcrypt($data['password']);
-        $userid->new = '1';
+        $userid->new = $checked;
         $userid->save();
         return redirect('login')->with('alert', 'Đổi mật khẩu thành công');
     }

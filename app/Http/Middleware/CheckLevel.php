@@ -16,8 +16,9 @@ class CheckLevel
      * @return mixed
      */
     public function handle($request, Closure $next, $guard = null)
-    {
-        if (Auth::user()->level_id == 1) {
+    {   
+        $admin = 1;
+        if (Auth::user()->level_id == $admin) {
             return $next($request);
         } else {
             return redirect()->route('user.show', ['id' => Auth::user()->id]);
