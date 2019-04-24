@@ -134,13 +134,12 @@ class HomeController extends Controller
         'address' => 'required',
         ]);
         $data = $request->all();
-        $user = new User;
-        $userid = $user->find($id);
-        $userid->name = $data['name'];
-        $userid->age = $data['age'];
-        $userid->address = $data['address'];
-        $userid->save();
-        return redirect()->route('user.user.show', $id)
+        $user = User::find($id);
+        $user->name = $data['name'];
+        $user->age = $data['age'];
+        $user->address = $data['address'];
+        $user->save();
+        return redirect()->route('user.show', $id)
                          ->with('alert', 'Đã cập nhật');
     }
 

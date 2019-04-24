@@ -9,8 +9,8 @@
             </div>
             <div class="modal-body">
                 <div class="content">
-                        <form method="post" action="{{ route('user.ajax') }}" role="form">
-                        {{ csrf_field() }}
+                    <form method="post" action="{{ route('user.ajax') }}" role="form">
+                    {{ csrf_field() }}
 
                         <table width="50%" cellspacing="0" cellpadding="10">
                             <input type="hidden" name="id" id="id">

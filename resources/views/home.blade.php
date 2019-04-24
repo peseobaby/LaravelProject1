@@ -136,13 +136,13 @@
                 });
             }
         })
-        var errors = @json($errors->all());
-        console.log(errors);
-        if (errors.length) {
-            $("#editUser").modal("show");
-        } else {
-            $("#editUser").modal("hide");
-        }
+        // var errors = @json($errors->all());
+        // console.log(errors);
+        // if (errors.length) {
+        //     $("#editUser").modal("show");
+        // } else {
+        //     $("#editUser").modal("hide");
+        // }
     });   
 </script>
 <style>

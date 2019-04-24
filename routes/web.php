@@ -40,7 +40,7 @@ Route::get('changepassword/{id}', 'HomeController@password')->name('changepasswo
 Route::post('/change/{id}', 'HomeController@changePassword')->name('change');
 Route::get('/export/{id}', 'HomeController@export')->name('export');
 Route::get('/edit/{id}', 'HomeController@editInfor')->name('edit.infor');
-Route::put('/update/{id}', 'HomeController@updateInfor')->name('update.infor');
+Route::post('/update/{id}', 'HomeController@updateInfor')->name('update.infor');
 Route::get('/live_search/action', 'HomeController@action')->name('live_search.action');
 Route::post('user/post', 'HomeController@post')->name('user.ajax');
 Route::get('/department_search/action', 'DepartmentController@action')->name('department_search.action');
