@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\User;
 use App\Level;
 use App\Department;
@@ -33,64 +34,73 @@ class HomeController extends Controller
      */
     public function index()
     {  
-        $users = User::with('level', 'department')->get();
-        return view('home', ['danhsach' => $users]);
-    }
-
-     public function addUser()
-    {   
-        $departments = Department::all();
-        $levels = Level::where('name', '<>', 'admin')->get();;
-        return view('user_add', compact('departments', 'levels'));
-    }
-
-    public function store(AddRequest $request)
-    {
-        date_default_timezone_set('Asia/Ho_Chi_Minh');
-        User::store($request->all());
-        return redirect('home')->with('alert', 'Đã thêm nhân viên');
-    }
-
-    public function editUser($id)
-    {
-        $user = User::find($id);
+        $users = User::with('level', 'department')
+                       ->where('id', '<>', '1')->get();
         $departments = Department::all();
         $levels = Level::where('name', '<>', 'admin')->get();
-        return view('user_edit', compact('user', 'id', 'departments', 'levels'));
+        return view('home', ['danhsach' => $users,
+                             'levels' => $levels,
+                             'departments' => $departments,
+                            ]);
     }
+
+    // public function store(AddRequest $request)
+    // {
+    //     $user = User::where('department_id', $request->department)
+    //                   ->where('level_id', 2)->first();
+    //     if (($request->level <> 2) || ($user == null)) {
+    //         User::store($request->all());
+    //         return redirect('home')->with('alert', 'Đã thêm nhân viên');
+    //     }
+    //     else {
+    //         $departments = Department::all();
+    //         $levels = Level::where('name', '<>', 'admin')->get();
+    //         return redirect('home')
+    //         ->with('alert', 'Phòng ban đã có giám đốc , chọn chức vụ khác');
+    //     }
+    // }
 
     public function showUser($id)
     {
         $user = User::find($id);
-        return view('user_show', compact('user', 'id'));
+        return view('user.user_show', compact('user', 'id'));
     }
 
-    public function update(UpdateRequest $request, $id)
-    {   
-        $data = $request->all();
-        $user = new User;
-        $userid = $user->find($id);
-        $userid->name = $data['name'];
-        $userid->age = $data['age'];
-        $userid->address = $data['address'];
-        $userid->level_id = $data['level'];
-        $userid->department_id = $data['department'];
-        unset($data['_token']);
-        unset($data['_method']);
-        $userid->save();
-        return redirect('home')->with('alert', 'Đã cập nhật');
-    }
+    // public function update(UpdateRequest $request, $id)
+    // {
+    //     dd('22222222');
+    //     $data = $request->all();
+    //     $user = User::find($id);
+    //     if ($data['age'] > 15 && $data['age'] < 100) {
+    //         $user->name = $data['name'];
+    //         $user->age = $data['age'];
+    //         $user->address = $data['address'];
+    //         $user->level_id = $data['level'];
+    //         $user->department_id = $data['department'];
+    //         $user->save();
+    //         return redirect('home')->with('alert', 'Đã cập nhật');
+    //     } else {
+    //         return redirect()->back()
+    //         ->with('alert', 'Tuổi phải lớn hơn 15 và nhỏ hơn 100');
+    //     }
+    // }
 
     public function destroy($id)
     {
         $user = User::find($id)->delete();
-        return redirect('home')->with('alert', 'Đã xóa nhân viên');
+        $users = User::where('level_id', '<>', '1')->get();
+        $departments = Department::all();
+        $levels = Level::where('name', '<>', 'admin')->get();
+        return view('user.search_user', ['users' => $users,
+                                        'levels' => $levels,
+                                        'departments' => $departments,
+                                        ])->with('alert', 'Đã xóa nhân viên');
     }
 
     public function resetForm()
-    {   
-        $users = User::with('level','department')->get();
-        return view('reset_password',['danhsach' => $users]);
+    {
+        $users = User::with('level', 'department')->get();
+        return view('user.reset_password', ['danhsach' => $users]);
     }
 
     public function resetPassword(Request $request)
@@ -103,22 +113,24 @@ class HomeController extends Controller
             $userid->password = bcrypt($userPassword);
             $userid->new = '0';
             $userid->save();
-            \Mail::to($userid->email)->send(new ConfirmPassword($userid, $userPassword));
+            \Mail::to($userid->email)
+            ->send(new ConfirmPassword($userid, $userPassword));
         }
-         return redirect('home')->with('alert', 'Reset mật khẩu thành công');
+        return redirect()->route('resetpassword')
+                         ->with('alert', 'Reset mật khẩu thành công');
     }
 
     public function editInfor($id)
     {
         $user = User::find($id);
-        return view('edit_infor', compact('user', 'id'));
+        return view('user.edit_infor', compact('user', 'id'));
     }
 
     public function updateInfor(Request $request, $id)
     {
-       $validatedData = $request->validate([
+        $validatedData = $request->validate([
         'name' => 'required',
-        'age' => 'required',
+        'age' => 'required|max:120',
         'address' => 'required',
         ]);
         $data = $request->all();
@@ -128,8 +140,8 @@ class HomeController extends Controller
         $userid->age = $data['age'];
         $userid->address = $data['address'];
         $userid->save();
-        return redirect()->route('user.show', $id)->with('alert', 'Đã cập nhật'); 
-
+        return redirect()->route('user.user.show', $id)
+                         ->with('alert', 'Đã cập nhật');
     }
 
     public function showStaff($id)
@@ -138,19 +150,20 @@ class HomeController extends Controller
         $data['id'] = $user->id;
         $department_id = $user->department_id;
         $level_id = $user->level_id;
-        $staffs = User::with('level','department')->where('department_id', $department_id)
-        ->where('level_id', '>', $level_id)->get();
-        return view('staff', $data, ['danhsach' => $staffs]);
+        $staffs = User::with('level', 'department')
+                        ->where('department_id', $department_id)
+                        ->where('level_id', '>', $level_id)->get();
+        return view('user.staff', $data, ['danhsach' => $staffs]);
     }
 
     public function password($id)
     {
         $user = User::find($id);
-        return view('change_password', compact('user', 'id'));
+        return view('user.change_password', compact('user', 'id'));
     }
 
     public function changePassword(passwordRequest $request, $id)
-    {   
+    {
         $checked = '1';
         $user = new User;
         $data = $request->all();
@@ -160,10 +173,58 @@ class HomeController extends Controller
         $userid->save();
         return redirect('login')->with('alert', 'Đổi mật khẩu thành công');
     }
-    
+
     public function export($id)
     {
         return Excel::download(new UsersExport, 'user.xlsx');
     }
+
+    public function action(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = $request->get('query');
+            if($query != "") {
+                $data = User::with('level', 'department')
+                              ->where('id', '<>', 1)
+                              ->where(function($qr) use ($query){
+                                $qr->orWhere('email', 'like', '%'.$query.'%')
+                                   ->orWhere('address', 'like', '%'.$query.'%')
+                                   ->orwhere('name', 'like', '%'.$query.'%');
+                              })->get();
+            } else {
+                $data = User::orderBy('id')->where('id', '<>', '1')->get();
+            }
+            $departments = Department::all();
+            $levels = Level::where('name', '<>', 'admin')->get();
+            return view('user.search_user', ['users' => $data,
+                                            'levels' => $levels,
+                                            'departments' => $departments,
+                                            ]);
+        }
+    }
+
+    public function post(AddRequest $request)
+    {
+        $data = $request->all();
+        if($data['id'] == null) {
+            $user = new User;
+            User::store($request->all());
+            return redirect('home')->with('alert', 'Đã thêm nhân viên');
+        } else {
+            $data = $request->all();
+            $user = User::find($data['id']);
+            if ($data['age'] > 15 && $data['age'] < 100) {
+            $user->name = $data['name'];
+            $user->age = $data['age'];
+            $user->address = $data['address'];
+            $user->level_id = $data['level'];
+            $user->department_id = $data['department'];
+            $user->save();
+            return redirect('home')->with('alert', 'Đã cập nhật');
+            } else {
+                return redirect()->back()
+                ->with('alert', 'Tuổi phải lớn hơn 15 và nhỏ hơn 100');
+            }
+        }
+    }
 }
-    

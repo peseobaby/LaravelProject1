@@ -17,28 +17,31 @@
                             {{ csrf_field() }}
                             <table width="50%" cellspacing="0" cellpadding="10">
                                 <tr>
-                                    <td>Tên nhân viên</td>
+                                    <td>Tên nhân viên <span class="errors" style="color: red" >*</span></td>
                                     <td>
                                         <input type="text" name="name" value="{{ $user->name }}" class="form-control" placeholder="tên nhân viên">
                                         @if($errors->has('name') )
+                                            <li style="color: red">
                                             {{ $errors->first('name') }}
                                         @endif
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Tuổi</td>
+                                    <td>Tuổi <span class="errors" style="color: red" >*</span></td>
                                     <td>
                                         <input type="text" name="age" value="{{ $user->age }}" class="form-control" placeholder="tuổi">
                                         @if($errors->has('age') )
+                                            <li style="color: red">
                                             {{ $errors->first('age') }}
                                         @endif
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Địa chỉ</td>
+                                    <td>Địa chỉ <span class="errors" style="color: red" >*</span></td>
                                     <td>
                                         <input type="text" name="address" value="{{ $user->address }}" class="form-control" placeholder="địa chỉ">
                                         @if($errors->has('address') )
+                                            <li style="color: red">
                                             {{ $errors->first('address') }}
                                         @endif
                                     </td>

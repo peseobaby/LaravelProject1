@@ -7,25 +7,27 @@
                 <div class="card-header">Admin Dashboard</div>
                 <div class="card-body">
                     <div class="head">
-                        <h1>Thêm Phòng ban </h1>
+                        <h1>Sửa thông tin phòng ban {{ $department->name }} </h1>
                     </div>
                     <div class="content">
                         <a href="{{ asset('') }}department" class="button">Trở về</a> <br/> <br/>
-                        <form method="post" action="{{ route('department') }}" role="form">
+                        <form method="post" action="{{ route('department.update',$id) }}" role="form">
                             {{ csrf_field() }}
+                            {{ method_field('put') }}
                             <table width="50%" cellspacing="0" cellpadding="10">
                                 <tr>
-                                    <td>Tên phòng ban</td>
+                                    <td>Tên phòng ban <span class="errors" style="color: red" >*</span></td>
                                     <td>
-                                        <input type="text" name="name" class="form-control" placeholder="tên phòng ban">
-                                     @if($errors->has('name'))
-                                        {{ $errors->first('name') }}
-                                    @endif
+                                        <input type="text" name="name" value="{{ $department->name }}" class="form-control" placeholder="tên phòng ban">
+                                        @if($errors->has('name'))
+                                            <li style="color: red">
+                                            {{ $errors->first('name') }}
+                                        @endif
                                     </td>
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td><button type="submit" class="button">Thêm phòng ban</button></td>
+                                    <td><button type="submit" class="button">Sửa thông tin</button></td>
                                 </tr>
                             </table>
                         </form>

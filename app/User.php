@@ -56,7 +56,7 @@ class User extends Authenticatable
         $user = new User;
         $user->name = $data['name'];
         $user->email = $data['email'];
-        $user->password = $data['password'];
+        $user->password = bcrypt('123456');
         $user->age = $data['age'];
         $user->address = $data['address'];
         $user->level_id = $data['level'];

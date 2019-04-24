@@ -18,8 +18,7 @@ class UsersExport implements FromCollection, WithMapping, WithHeadings
     {
     	$department_id = Auth::user()->department_id;
     	$level_id = Auth::user()->level_id;
-        return User::with('level','department')->where('department_id', $department_id)
-        ->get();
+        return User::with('level','department')->where('department_id', $department_id)->get();
     }
     public function map($user): array
     {

@@ -17,19 +17,22 @@ class AdminController extends Controller
     //
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
     protected $redirectTo = 'admin/dashboard';
+
     public function __construct()
     {
         $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
     }
+
     public function getLogin() 
     {
-    	return view('admin.login');
+        return view('admin.login');
     }
+    
     public function postLogin()
     {
-    	$this->validateLogin($request);
-    	$throttles = $this->isUsingThrottlesLoginsTrait();
-    	if ($throttles && $lockedOut = $this->hasTooManyLoginAttempts($request)) {
+        $this->validateLogin($request);
+        $throttles = $this->isUsingThrottlesLoginsTrait();
+        if ($throttles && $lockedOut = $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
             return $this->sendLockoutResponse($request);
         }

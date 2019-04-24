@@ -12,7 +12,7 @@
                         </div>
                     @endif
                     <div class="content">
-                        <h1>Danh sách nhân viên</h1>
+                        <h1>Reset Password</h1>
                         <a href="{{ route('home') }}">trở về</a>
                         <form action="{{ route('resetpassword') }}" method="post">
                             {{ csrf_field() }}

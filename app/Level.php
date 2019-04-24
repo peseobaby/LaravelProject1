@@ -8,6 +8,6 @@ class Level extends Model
 {
     public function getName()
     {
-    	return Level::get('name');
+        return Level::get('name');
     }
 }

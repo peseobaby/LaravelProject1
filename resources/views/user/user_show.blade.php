@@ -16,7 +16,7 @@
                         <h1>Thông tin nhân viên {{ $user->name }}</h1>
                         <table width="100%" cellspacing="0" cellpadding="10">
                                 <tr>
-                                	<td>ID</td>
+                                    <td>ID</td>
                                     <td>Name</td>
                                     <td>Email</td>
                                     <td>Tuổi</td>
@@ -26,7 +26,7 @@
                                     <td>Options</td>
                                 </tr>
                                 <tr>
-                                	<td>{{ $user->id }}</td>
+                                    <td>{{ $user->id }}</td>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td>{{ $user->age }}</td>

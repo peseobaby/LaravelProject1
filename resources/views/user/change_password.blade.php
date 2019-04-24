@@ -13,20 +13,22 @@
                             {{ method_field('post') }}
                             <table width="50%" cellspacing="0" cellpadding="10">
                                 <tr>
-                                    <td>Mật khẩu</td>
+                                    <td>Mật khẩu <span class="errors" style="color: red" >*</span></td>
                                     <td>
-                                        <input type="text" name="password" class="form-control" placeholder="nhập mật khẩu">
+                                        <input type="password" name="password" class="form-control" placeholder="nhập mật khẩu">
                                         @if($errors->has('password') )
+                                            <li style="color: red">
                                             {{ $errors->first('password') }}
                                         @endif
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Nhập lại mật khẩu</td>
+                                    <td>Nhập lại mật khẩu <span class="errors" style="color: red" >*</span></td>
                                     <td>
-                                        <input type="text" name="password_confirmation" class="form-control" 
+                                        <input type="password" name="password_confirmation" class="form-control" 
                                         placeholder="nhập mật khẩu">
                                         @if($errors->has('password_confirmation') )
+                                            <li style="color: red">
                                             {{ $errors->first('password_confirmation') }}
                                         @endif
                                     </td>

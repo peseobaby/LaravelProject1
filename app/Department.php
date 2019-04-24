@@ -9,14 +9,14 @@ class Department extends Model
 {
     protected $table = 'departments';
     protected $fillable = [
-        'name',  
+        'name',
     ];
     public static function getAll()
     {
         return Department::get();
     }
     public static function store($data)
-    {   
+    {
         $department = new Department;
         $department->name = $data['name'];
         $department->save();

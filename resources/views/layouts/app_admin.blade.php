@@ -11,7 +11,8 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
@@ -38,6 +39,9 @@
             #navbarSupportedContent a:hover {
               background: #F1F1F1;
               color: #333;
+            }
+            #errors a {
+                color: red;
             }
     </style>
 </head>
@@ -85,7 +89,7 @@
                                         {{ __('Logout') }}
                                     </a>
                                      <a class="dropdown-item" href="{{ route('changepassword', Auth::user()->id) }}">
-                                        Đổi mật khẩu</a>
+                                    Đổi mật khẩu</a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
@@ -102,4 +106,5 @@
         </main>
     </div>
 </body>
+@yield('js')
 </html>
