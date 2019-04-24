@@ -46,18 +46,18 @@ class HomeController extends Controller
 
     // public function store(AddRequest $request)
     // {
-    //     $user = User::where('department_id', $request->department)
-    //                   ->where('level_id', 2)->first();
-    //     if (($request->level <> 2) || ($user == null)) {
+        // $user = User::where('department_id', $request->department)
+        //               ->where('level_id', 2)->first();
+        // if (($request->level <> 2) || ($user == null)) {
     //         User::store($request->all());
     //         return redirect('home')->with('alert', 'Đã thêm nhân viên');
     //     }
     //     else {
     //         $departments = Department::all();
     //         $levels = Level::where('name', '<>', 'admin')->get();
-    //         return redirect('home')
-    //         ->with('alert', 'Phòng ban đã có giám đốc , chọn chức vụ khác');
-    //     }
+        //     return redirect('home')
+        //     ->with('alert', 'Phòng ban đã có giám đốc , chọn chức vụ khác');
+        // }
     // }
 
     public function showUser($id)
@@ -204,26 +204,33 @@ class HomeController extends Controller
 
     public function post(AddRequest $request)
     {
-        $data = $request->all();
-        if($data['id'] == null) {
-            $user = new User;
-            User::store($request->all());
-            return redirect('home')->with('alert', 'Đã thêm nhân viên');
-        } else {
+        $giamdoc = User::where('department_id', $request->department)
+                      ->where('level_id', 2)->first();
+        if (($request->level <> 2) || ($giamdoc == null)) {
             $data = $request->all();
-            $user = User::find($data['id']);
-            if ($data['age'] > 15 && $data['age'] < 100) {
-            $user->name = $data['name'];
-            $user->age = $data['age'];
-            $user->address = $data['address'];
-            $user->level_id = $data['level'];
-            $user->department_id = $data['department'];
-            $user->save();
-            return redirect('home')->with('alert', 'Đã cập nhật');
+            if($data['id'] == null) {
+                $user = new User;
+                User::store($request->all());
+                return redirect('home')->with('alert', 'Đã thêm nhân viên');
             } else {
-                return redirect()->back()
-                ->with('alert', 'Tuổi phải lớn hơn 15 và nhỏ hơn 100');
+                $data = $request->all();
+                $user = User::find($data['id']);
+                if ($data['age'] > 15 && $data['age'] < 100) {
+                $user->name = $data['name'];
+                $user->age = $data['age'];
+                $user->address = $data['address'];
+                $user->level_id = $data['level'];
+                $user->department_id = $data['department'];
+                $user->save();
+                return redirect('home')->with('alert', 'Đã cập nhật');
+                } else {
+                    return redirect()->back()
+                    ->with('alert', 'Tuổi phải lớn hơn 15 và nhỏ hơn 100');
+                }
             }
+        } else {
+            return redirect('home')
+            ->with('alert', 'Phòng ban đã có giám đốc , chọn chức vụ khác');
         }
     }
 }
