@@ -208,7 +208,7 @@ class HomeController extends Controller
                       ->where('level_id', 2)->first();
         if (($request->level <> 2) || ($giamdoc == null)) {
             $data = $request->all();
-            if($data['id'] == null) {
+            if($data['id'] == 0) {
                 $user = new User;
                 User::store($request->all());
                 return redirect('home')->with('alert', 'Đã thêm nhân viên');

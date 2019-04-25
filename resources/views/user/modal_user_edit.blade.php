@@ -11,16 +11,14 @@
                 <div class="content">
                     <form method="post" action="{{ route('user.ajax') }}" role="form">
                     {{ csrf_field() }}
-
                         <table width="50%" cellspacing="0" cellpadding="10">
                             <input type="hidden" name="id" id="id">
-
                             <tr>
                                 <td>Email đăng nhập <span class="errors" style="color: red" >*</span></td>
                                 <td>
                                     <input type="text" name="email" id ="email" class="form-control" placeholder="Email">
                                     @if($errors->has('email'))
-                                        <span style="color: red">
+                                        <span style="color: red" class="span_error">
                                         {{ $errors->first('email') }}
                                     @endif
                                 </td>
@@ -30,7 +28,7 @@
                                 <td>
                                     <input type="text" name="name" id ="name" class="form-control" placeholder="Tên nhân viên" >
                                     @if($errors->has('name'))
-                                        <span style="color: red">
+                                        <span style="color: red" class="span_error">
                                         {{ $errors->first('name') }}
                                     @endif
                                 </td>
@@ -40,7 +38,7 @@
                                 <td>
                                     <input type="number" id="age" name="age" class="form-control" placeholder="Tuổi">
                                     @if($errors->has('age'))
-                                        <span style="color: red">
+                                        <span style="color: red" class="span_error">
                                         {{ $errors->first('age') }}
                                     @endif
                                 </td>
@@ -50,7 +48,7 @@
                                 <td>
                                     <input type="text" name="address" id="address" class="form-control" placeholder="Địa chỉ">
                                     @if($errors->has('address'))
-                                        <span style="color: red">
+                                        <span style="color: red" class="span_error">
                                         {{ $errors->first('address') }}
                                     @endif
                                 </td>
@@ -63,7 +61,7 @@
                                             {{ $level->name }}<br/>
                                     @endforeach
                                     @if($errors->has('level'))
-                                        <span style="color: red">
+                                        <span style="color: red" class="span_error">
                                         {{ $errors->first('level') }}
                                     @endif
                                 </td>
@@ -75,7 +73,7 @@
                                             <input type="radio" name="department" class="department" value="{{ $department->id }}"/>{{ $department->name }}<br/>
                                     @endforeach
                                     @if($errors->has('department'))
-                                        <span style="color: red">
+                                        <span style="color: red" class="span_error">
                                         {{ $errors->first('department') }}
                                     @endif
                                 </td>

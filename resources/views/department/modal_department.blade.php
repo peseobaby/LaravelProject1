@@ -18,7 +18,7 @@
                                 <td>
                                     <input type="text" name="name" id="nameDepartment" class="form-control" placeholder="tên phòng ban">
                                     @if($errors->has('name'))
-                                        <span style="color: red">
+                                        <span style="color: red" class="span_error">
                                         {{ $errors->first('name') }}
                                     @endif
                                 </td>

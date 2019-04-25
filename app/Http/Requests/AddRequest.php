@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\ValidationException;
 
 class AddRequest extends FormRequest
 {
@@ -23,6 +25,7 @@ class AddRequest extends FormRequest
      */
     public function rules()
     {
+        session()->put('user_id', request()->get('id'));
         return [
             'name' => 'bail|required|',
             'email' => 'bail|required|email|',

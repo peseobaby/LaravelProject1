@@ -100,9 +100,10 @@
         console.log(errors);
         if (errors.length) {
             $("#departmentModal").modal("show");
-        } else {
-            $("#departmentModal").modal("hide");
         }
+        $("#departmentModal").on("hide.bs.modal", function (event) { 
+            $(".span_error").remove();
+        })
     });
 </script>
 <style>

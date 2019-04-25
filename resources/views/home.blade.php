@@ -14,7 +14,7 @@
                     <div class="content">
                         <h1>Danh sách nhân viên</h1>
                         @include('user.modal_user_edit', ['departments' => $departments, 'levels' => $levels])
-                        <button data-toggle="modal" data-target="#editUser" data-name = "" data-age = "" data-address = "" data-level_id = "" data-department_id = "" data-id ="">Thêm Nhân viên</button> <br/> <br/>
+                        <button data-toggle="modal" data-target="#editUser" data-name = "" data-age = "" data-address = "" data-level_id = "" data-department_id = "" data-id ="0">Thêm Nhân viên</button> <br/> <br/>
 
                         <div class="panel-body">
                             <input type="text" name="search" id="search" class="form-control" placeholder="Search">
@@ -46,7 +46,7 @@
                                         <td>
                                             <button class="edit" data-toggle="modal" data-target="#editUser" data-id ="{{ $ds->id }}" data-name = "{{ $ds->name }}" data-age ="{{ $ds->age }}" data-address ="{{ $ds->address }}" data-level_id="{{ $ds->level_id}}" data-department_id="{{ $ds->department_id}}" data-email="{{ $ds->email }}">Sửa</button>
                                             <meta name="csrf-token" content="{{ csrf_token() }}">
-                                            <button class="delete" data-id="{{ $ds->id }}" >Xóa</button>
+                                            <button class="delete" data-delete-id="{{ $ds->id }}" >Xóa</button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -97,7 +97,8 @@
             modal.find(".modal-body #email").val(email);
             modal.find(".modal-body #age").val(age);
             modal.find(".modal-body #address").val(address);
-            if(id != "") {
+            if(id != 0) {
+                console.log(id);
                 $("#email").parents("tr").hide();
             } else {
                 $("#email").parents("tr").show();
@@ -119,7 +120,7 @@
         })
         //delete
         $(document).on('click', '.delete', function($event) {
-            var id = $(this).data("id");
+            var id = $(this).attr("data-delete-id");
             var token = $("meta[name='csrf-token']").attr("content");
             if (confirm('Bạn có chắc chắn muốn xóa')) {
                 $.ajax({
@@ -136,13 +137,18 @@
                 });
             }
         })
-        // var errors = @json($errors->all());
-        // console.log(errors);
-        // if (errors.length) {
-        //     $("#editUser").modal("show");
-        // } else {
-        //     $("#editUser").modal("hide");
-        // }
+        var errors = @json($errors->all());
+        var user_id = {{ session()->get('user_id')}};
+        if (errors.length) {
+            $(`button[data-id='${user_id}']`).trigger( "click" );
+        }
+
+        $("#editUser").on("hide.bs.modal", function (event) { 
+            $(".span_error").remove();
+            $(".department").prop("checked", false);
+            $(".level").prop("checked", false);
+        })
+
     });   
 </script>
 <style>
