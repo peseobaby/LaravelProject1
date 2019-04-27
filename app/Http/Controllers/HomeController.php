@@ -32,53 +32,62 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {  
-        $users = User::with('level', 'department')->get();
-        return view('home', ['danhsach' => $users]);
-    }
-
-     public function addUser()
-    {   
+    {
         $departments = Department::all();
         $levels = Level::where('name', '<>', 'admin')->get();;
-        return view('user_add', compact('departments', 'levels'));
+        $users = User::with('level', 'department')->where('level_id', '<>', '1')->get();
+        return view('home', ['danhsach' => $users,
+                             'departments' => $departments,
+                             'levels' => $levels,
+                            ]);
     }
 
-    public function store(AddRequest $request)
+    public function store(Request $request)
     {
-        date_default_timezone_set('Asia/Ho_Chi_Minh');
-        User::store($request->all());
-        return redirect('home')->with('alert', 'Đã thêm nhân viên');
-    }
-
-    public function editUser($id)
-    {
-        $user = User::find($id);
-        $departments = Department::all();
-        $levels = Level::where('name', '<>', 'admin')->get();
-        return view('user_edit', compact('user', 'id', 'departments', 'levels'));
+        if ($request->ajax()) {
+             $validator = \Validator::make($request->all(), [
+                'name' => 'required',
+                'email' => 'required|email|unique:users,email',
+                'age' => 'required',
+                'address' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json($validator->errors()->all(), 422);
+            }
+            User::store($request->all());
+            $users = User::where('level_id', '<>', '1')->get();
+            return view('user.user_add', ['users' => $users])->with('alert', 'Đã thêm nhân viên');
+        }
     }
 
     public function showUser($id)
     {
         $user = User::find($id);
-        return view('user_show', compact('user', 'id'));
+        return view('user.user_show', compact('user', 'id'));
     }
 
-    public function update(UpdateRequest $request, $id)
-    {   
-        $data = $request->all();
-        $user = new User;
-        $userid = $user->find($id);
-        $userid->name = $data['name'];
-        $userid->age = $data['age'];
-        $userid->address = $data['address'];
-        $userid->level_id = $data['level'];
-        $userid->department_id = $data['department'];
-        unset($data['_token']);
-        unset($data['_method']);
-        $userid->save();
-        return redirect('home')->with('alert', 'Đã cập nhật');
+    public function update(Request $request, $id)
+    {
+        if ($request->ajax()) {
+             $validator = \Validator::make($request->all(), [
+                'name' => 'required',
+                'age' => 'required',
+                'address' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json($validator->errors()->all(), 422);
+            }
+            $data = $request->all();
+            $user = User::find($id);
+            $user->name = $data['name'];
+            $user->age = $data['age'];
+            $user->address = $data['address'];
+            $user->level_id = $data['level'];
+            $user->department_id = $data['department'];
+            $user->save();
+            $users = User::where('level_id', '<>', '1')->get();
+            return view('user.user_add', ['users' => $users]);;
+        }
     }
 
     public function destroy($id)
@@ -89,8 +98,8 @@ class HomeController extends Controller
 
     public function resetForm()
     {   
-        $users = User::with('level','department')->get();
-        return view('reset_password',['danhsach' => $users]);
+        $users = User::with('level', 'department')->get();
+        return view('user.reset_password', ['danhsach' => $users]);
     }
 
     public function resetPassword(Request $request)
@@ -111,7 +120,7 @@ class HomeController extends Controller
     public function editInfor($id)
     {
         $user = User::find($id);
-        return view('edit_infor', compact('user', 'id'));
+        return view('user.edit_infor', compact('user', 'id'));
     }
 
     public function updateInfor(Request $request, $id)
@@ -140,13 +149,13 @@ class HomeController extends Controller
         $level_id = $user->level_id;
         $staffs = User::with('level','department')->where('department_id', $department_id)
         ->where('level_id', '>', $level_id)->get();
-        return view('staff', $data, ['danhsach' => $staffs]);
+        return view('department.staff', $data, ['danhsach' => $staffs]);
     }
 
     public function password($id)
     {
         $user = User::find($id);
-        return view('change_password', compact('user', 'id'));
+        return view('user.change_password', compact('user', 'id'));
     }
 
     public function changePassword(passwordRequest $request, $id)

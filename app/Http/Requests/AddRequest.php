@@ -26,12 +26,8 @@ class AddRequest extends FormRequest
         return [
             'name' => 'bail|required|',
             'email' => 'bail|required|email|',
-            'password' => 'bail|required|min:3',
-            'password_confirmation' => 'bail|required|same:password',
             'age' => 'required|num',
             'address' => 'required',
-            'level' => 'required_without_all',
-            'department' => 'required_without_all',
         ];
     }
     
@@ -41,13 +37,8 @@ class AddRequest extends FormRequest
             'name.required' =>  'Tên không để trống',
             'email.required' => 'Email không để trống',
             'email.email' => 'Email phải có định dạng @abc',
-            'password.required' => 'Mật khẩu không để trống',
-            'password_confirmation.required' => 'Không để trống phần này',
-            'password_confirmation.same' => 'Không giống mật khẩu',
             'age.required' => ' điền tuổi',
             'address.required' => 'địa chỉ không được để trống',
-            'level.required_without_all' => 'Chọn 1',
-            'department.required_without_all' => 'Chọn 1',
         ];
     }
 }

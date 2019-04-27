@@ -11,38 +11,41 @@ class DepartmentController extends Controller
 {
     public function index()
     {
-    	$departments = Department::all();
-    	return view('department', ['danhsach' => $departments]);
+        $departments = Department::all();
+        return view('department.department', ['danhsach' => $departments]);
     }
 
-    public function addDepartment()
+    public function store(Request $request)
     {
-    	return view('department_add');
+        if ($request->ajax()) {
+             $validator = \Validator::make($request->all(), [
+                'name' => 'required|unique:departments,name',
+            ]);
+            if ($validator->fails()) {
+                return response()->json($validator->errors()->all(), 422);
+            }
+            Department::store($request->all());
+            $departments = Department::all();
+            return view('department.department_add', ['departments' => $departments]);
+        }
     }
 
-    public function store(DepartmentRequest $request)
+    public function update(Request $request, $id)
     {
-        date_default_timezone_set('Asia/Ho_Chi_Minh');
-        Department::store($request->all());
-        return redirect('department')->with('alert', 'Đã thêm phòng ban');;
-    }
-
-    public function editDepartment($id)
-    {
-        $department = Department::find($id);
-        return view('department_edit', compact('department','id'));
-    }
-
-      public function update(DepartmentRequest $request, $id)
-    {   
-        $department = new Department;
-        $data = $request->all();
-        $departmentid = $department->find($id);
-        $departmentid->name = $data['name'];
-        unset($data['_token']);
-        unset($data['_method']);
-        $departmentid->save();
-        return redirect('department')->with('alert', 'cập nhật thành công');
+        if ($request->ajax()) {
+             $validator = \Validator::make($request->all(), [
+                'name' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json($validator->errors()->all(), 422);
+            }
+            $data = $request->all();
+            $department = Department::find($id);
+            $department->name = $data['name'];
+            $department->save();
+            $departments = Department::all();
+            return view('department.department_add', ['departments' => $departments]);;
+        }
     }
 
     public function destroy($id)
@@ -54,8 +57,8 @@ class DepartmentController extends Controller
     
     public static function showDepartment(Request $request, $id)
     {   
-    	$users = User::with('level','department')->get()->where('department_id', $id);
+        $users = User::with('level', 'department')->get()->where('department_id', $id);
         $department = Department::find($id);
-        return view('department_show', ['department' => $department], ['danhsach' => $users]);
+        return view('department.department_show', ['department' => $department], ['danhsach' => $users]);
     }
 }
