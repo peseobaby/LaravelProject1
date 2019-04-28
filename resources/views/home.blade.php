@@ -59,5 +59,9 @@
 </div>
 @endsection
 @section('js')
+<script>
+    levels = @json($levels);
+    departments = @json($departments);
+</script>
 <script type="text/javascript" src="{{ asset('/js/user.js') }}"></script>
 @endsection

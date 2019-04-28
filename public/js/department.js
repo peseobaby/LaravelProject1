@@ -1,8 +1,20 @@
 $(document).ready(function(){
+    var errorHandle = function(response, message) {
+                        console.log(response);
+                        $('#validate').remove();
+                        let errors = JSON.parse(response.responseText);
+                        $('table').parent().prepend(
+                            `<div class="alert alert-success" id="validate">`
+                                + errors +
+                            `</div>` 
+                        );
+                        $('.editDepartment').prop('disabled', true);
+                        $('#addDepartment').prop('disabled', true);
+                    };
         //adduser
         $("#addDepartment").click(function(){
             $("tbody").prepend(`<tr>
-                                <form method="post" action="{{ route('department') }}" role="form">
+                                <form method="post" action="/home" role="form">
                                 {{ csrf_field()}}
                                     <td></td>
                                     <td><input type='text' name='name' placeholder='name'>
@@ -32,16 +44,7 @@ $(document).ready(function(){
                     $('tbody').empty();
                     $('tbody').html(data);
                 },
-                error : function(response, message) {
-                    console.log(response);
-                    $('#validate').remove();
-                    let errors = JSON.parse(response.responseText);
-                    $('table').parent().prepend(
-                        `<div class="alert alert-success" id="validate">`
-                            + errors +
-                        `</div>`
-                        )
-                },
+                error : errorHandle
             })
             $('.editDepartment').prop('disabled', false);
             $('#addDepartment').prop('disabled', false);
@@ -51,7 +54,7 @@ $(document).ready(function(){
             var id = $(this).parent().prevAll("td[name ='id']").text();
             var name = $(this).parent().prevAll("td[name ='name']").text();
             let template = `<tr>
-                                <form method="post" action="{{ route('department') }}" role="form">
+                                <form method="post" action="/home" role="form">
                                 {{ csrf_field()}}
                                     <td><input type='text' name='id' value=`+ id + ` readonly></td>
                                     <td><input type='text' name='name' value=`+ name + `></td>`
@@ -86,16 +89,7 @@ $(document).ready(function(){
                     $('#addDepartment').prop('disabled', false);
                     
                 },
-                error : function(response, message) {
-                    console.log(response);
-                    $('#validate').remove();
-                    let errors = JSON.parse(response.responseText);
-                    $('table').parent().prepend(
-                        `<div class="alert alert-success" id="validate">`
-                            + errors +
-                        `</div>`
-                        )
-                },
+                error : errorHandle
             })
         })
         $(document).on('click', '.cancel', function() {

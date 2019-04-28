@@ -23,13 +23,13 @@ class AdminController extends Controller
     }
     public function getLogin() 
     {
-    	return view('admin.login');
+        return view('admin.login');
     }
     public function postLogin()
     {
-    	$this->validateLogin($request);
-    	$throttles = $this->isUsingThrottlesLoginsTrait();
-    	if ($throttles && $lockedOut = $this->hasTooManyLoginAttempts($request)) {
+        $this->validateLogin($request);
+        $throttles = $this->isUsingThrottlesLoginsTrait();
+        if ($throttles && $lockedOut = $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
             return $this->sendLockoutResponse($request);
         }
