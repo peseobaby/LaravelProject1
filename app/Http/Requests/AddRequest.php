@@ -28,7 +28,7 @@ class AddRequest extends FormRequest
         session()->put('user_id', request()->get('id'));
         return [
             'name' => 'bail|required|',
-            'email' => 'bail|required|email|',
+            'email' => 'bail|required|email',
             'age' => 'required',
             'address' => 'required',
             'level' => 'required_without_all',

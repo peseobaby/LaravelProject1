@@ -20,7 +20,6 @@ Auth::routes();
 
 Route::get('home', 'HomeController@index')->name('home')->middleware('new','level');
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::get('user/add', 'HomeController@addUser')->name('user.add');
 Route::post('home', 'HomeController@store')->name('user.store');
 Route::get('user/{id}/edit', 'HomeController@editUser')->name('user.edit');
 Route::delete('user/delete/{id}', 'HomeController@destroy')->name('user.destroy');
@@ -30,7 +29,6 @@ Route::put('/user/update/{id}', 'HomeController@update')->name('user.update');
 Route::get('resetform', 'HomeController@resetForm')->name('form.reset');
 Route::post('/rspassword', 'HomeController@resetPassword')->name('resetpassword');
 Route::get('department', 'DepartmentController@index')->name('department');
-Route::get('department/add', 'DepartmentController@addDepartment')->name('department.add');
 Route::post('department', 'DepartmentController@store')->name('department.store');
 Route::get('department/{id}/edit', 'DepartmentController@editDepartment')->name('department.edit');
 Route::get('department/{id}/show', 'DepartmentController@showDepartment')->name('department.show');
@@ -42,8 +40,10 @@ Route::get('/export/{id}', 'HomeController@export')->name('export');
 Route::get('/edit/{id}', 'HomeController@editInfor')->name('edit.infor');
 Route::post('/update/{id}', 'HomeController@updateInfor')->name('update.infor');
 Route::get('/live_search/action', 'HomeController@action')->name('live_search.action');
+Route::get('/user/add/{id}', 'HomeController@modalAdd')->name('user.add');
 Route::post('user/post', 'HomeController@post')->name('user.ajax');
 Route::get('/department_search/action', 'DepartmentController@action')->name('department_search.action');
+Route::get('/department/add/{id}', 'DepartmentController@modalAdd')->name('department.add');
 Route::post('department/post', 'DepartmentController@post')->name('department.post');
 Route::get('/department_user_search/action/{id}', 'DepartmentController@searchUser')->name('department_user_search.action');
 

@@ -8,7 +8,7 @@
         <td>{{ $user->level->name }}</td>
         <td>{{ $user->department->name }}</td>
         <td>
-            <button class="edit" data-toggle="modal" data-target="#editUser" data-id ="{{ $user->id }}" data-name = "{{ $user->name }}" data-age ="{{ $user->age }}" data-address ="{{ $user->address }}" data-level_id="{{ $user->level_id}}" data-department_id="{{ $user->department_id}}" data-email="{{ $user->email }}">Sửa</button>
+            <button class="showModal" data-toggle="modal" data-id ="{{ $user->id }}">Sửa</button>
             <meta name="csrf-token" content="{{ csrf_token() }}">
             <button class="delete" data-id="{{ $user->id }}" >Xóa</button>
         </td>

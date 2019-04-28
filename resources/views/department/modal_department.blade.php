@@ -12,11 +12,11 @@
                         {{ csrf_field() }}
 
                         <table width="50%" cellspacing="0" cellpadding="10">
-                            <input type="hidden" name="id" id="idDepartment">
+                            <input type="hidden" name="id" id="idDepartment" value="{{ $department->id }}">
                             <tr>
                                 <td>Tên phòng ban <span class="errors" style="color: red" >*</span></td>
                                 <td>
-                                    <input type="text" name="name" id="nameDepartment" class="form-control" placeholder="tên phòng ban">
+                                    <input type="text" name="name" id="nameDepartment" class="form-control" placeholder="tên phòng ban" value="{{ $department->name }}">
                                     @if($errors->has('name'))
                                         <span style="color: red" class="span_error">
                                         {{ $errors->first('name') }}

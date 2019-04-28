@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Department;
+use Validator;
 use App\Http\Requests\DepartmentRequest;
 use Illuminate\Http\Request;
 
@@ -14,35 +15,6 @@ class DepartmentController extends Controller
         $departments = Department::all();
         return view('department.department', ['danhsach' => $departments]);
     }
-
-    // public function addDepartment()
-    // {
-    //     return view('department.department_add');
-    // }
-
-    // public function store(DepartmentRequest $request)
-    // {
-    //     Department::store($request->all());
-    //     return redirect('department.department')
-    //     ->with('alert', 'Đã thêm phòng ban');
-    // }
-
-    // public function editDepartment($id)
-    // {
-    //     $department = Department::find($id);
-    //     return view('department.department_edit', compact('department','id'));
-    // }
-
-    // public function update(DepartmentRequest $request, $id)
-    // {
-    //     $department = new Department;
-    //     $data = $request->all();
-    //     $departmentid = $department->find($id);
-    //     $departmentid->name = $data['name'];
-    //     $departmentid->save();
-    //     return redirect('department')
-    //            ->with('alert', 'cập nhật thành công');
-    // }
 
     public function destroy($id)
     {
@@ -73,14 +45,28 @@ class DepartmentController extends Controller
             } else {
                 $data = Department::orderBy('id')->get();
             }
-            return view('department.search_department', ['departments' => $data]);
+            return view('department.search_department',
+                        ['departments' => $data]);
         }
+    }
+
+    public function modalAdd($id)
+    {
+        $errors = request()->get('errors') ?? [];
+        if($id == 0) {
+            $department = new Department;
+            $department->id = 0;
+        } else {
+            $department = Department::find($id);
+        };
+        return view('department.modal_department',
+                    ['department' => $department])->withErrors($errors);
     }
 
     public function post(DepartmentRequest $request)
     {
         $data = $request->all();
-        if($data['id'] == null) {
+        if($data['id'] == 0) {
             $department = new Department;
             Department::store($request->all());
             return redirect('department')

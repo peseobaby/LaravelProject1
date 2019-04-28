@@ -13,9 +13,8 @@
                     @endif
                     <div class="content">
                         <h1>Danh sách nhân viên</h1>
-                        @include('user.modal_user_edit', ['departments' => $departments, 'levels' => $levels])
-                        <button data-toggle="modal" data-target="#editUser" data-name = "" data-age = "" data-address = "" data-level_id = "" data-department_id = "" data-id ="0">Thêm Nhân viên</button> <br/> <br/>
-
+                        <button data-toggle="modal" class="showModal" data-id ="0">Thêm Nhân viên</button> <br/> <br/>
+                        <div class="includeModal"></div>
                         <div class="panel-body">
                             <input type="text" name="search" id="search" class="form-control" placeholder="Search">
                             <br></br>
@@ -44,7 +43,7 @@
                                         <td>{{ $ds->level->name }}</td>
                                         <td>{{ $ds->department->name }}</td>
                                         <td>
-                                            <button class="edit" data-toggle="modal" data-target="#editUser" data-id ="{{ $ds->id }}" data-name = "{{ $ds->name }}" data-age ="{{ $ds->age }}" data-address ="{{ $ds->address }}" data-level_id="{{ $ds->level_id}}" data-department_id="{{ $ds->department_id}}" data-email="{{ $ds->email }}">Sửa</button>
+                                            <button class="showModal" data-toggle="modal" data-id ="{{ $ds->id }}">Sửa</button>
                                             <meta name="csrf-token" content="{{ csrf_token() }}">
                                             <button class="delete" data-delete-id="{{ $ds->id }}" >Xóa</button>
                                         </td>
@@ -52,7 +51,6 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        
                     </div>
                 </div>
             </div>
@@ -62,95 +60,12 @@
 @endsection
 @section('js')
 <script>
-    $(document).ready(function() {
-        //search
-        function fetch_user_data(query = ""){
-            $.ajax({
-                url:"{{ route('live_search.action') }}",
-                method : "GET",
-                data:{query:query},
-                dataType: 'html',
-                success:function(data){
-                    $("#tbody").empty();
-                    $("#tbody").html(data);
-                }
-            })
-        }
-        $(document).on("keyup", "#search", function(){
-            var query = $(this).val();
-            fetch_user_data(query);
-        });
-
-        //modal
-        $("#editUser").on("show.bs.modal", function (event) {
-            var button = $(event.relatedTarget);
-            var id = button.data("id");
-            var name = button.data("name");
-            var email = button.data("email");
-            var age = button.data("age");
-            var address = button.data("address");
-            var level_id = button.data("level_id");
-            var department_id = button.data("department_id");
-            var modal = $(this);
-            modal.find(".modal-body #id").val(id);
-            modal.find(".modal-body #name").val(name);
-            modal.find(".modal-body #email").val(email);
-            modal.find(".modal-body #age").val(age);
-            modal.find(".modal-body #address").val(address);
-            if(id != 0) {
-                console.log(id);
-                $("#email").parents("tr").hide();
-            } else {
-                $("#email").parents("tr").show();
-            }
-            if(level_id != "") {
-                $(".level").each(function() {
-                    if (level_id == $(this).val()) {
-                        $(this).prop("checked", true);
-                    }
-                })
-            }
-            if(department_id != "") {
-                $(".department").each(function() {
-                    if (department_id == $(this).val()) {
-                        $(this).prop("checked", true);
-                    }
-                })
-            }
-        })
-        //delete
-        $(document).on('click', '.delete', function($event) {
-            var id = $(this).attr("data-delete-id");
-            var token = $("meta[name='csrf-token']").attr("content");
-            if (confirm('Bạn có chắc chắn muốn xóa')) {
-                $.ajax({
-                    url: "user/delete/"+id,
-                    type: 'DELETE',
-                    data: {
-                        "id": id,
-                        "_token": token,
-                    },
-                    success:function(data){
-                    $("#tbody").empty();
-                    $("#tbody").html(data);
-                }   
-                });
-            }
-        })
-        var errors = @json($errors->all());
-        var user_id = {{ session()->get('user_id')}};
-        if (errors.length) {
-            $(`button[data-id='${user_id}']`).trigger( "click" );
-        }
-
-        $("#editUser").on("hide.bs.modal", function (event) { 
-            $(".span_error").remove();
-            $(".department").prop("checked", false);
-            $(".level").prop("checked", false);
-        })
-
-    });   
+    $(function() {
+        errors = @json($errors->getMessages());
+        user_id =  {{ session()->has('user_id') ? session()->get('user_id') : 0 }};
+    });
 </script>
+<script src="{{ asset('/js/user.js') }}"></script>
 <style>
     #search {
         width: 140px;
