@@ -26,16 +26,16 @@
                             </tr>
                         </thead>
                         <tbody id ="tbody1">
-                            @foreach($danhsach as $ds)
+                            @foreach($departments as $department)
                                 <tr>
-                                    <td>{{ $ds->id }}</td>
-                                    <td>{{ $ds->name }}</td>
+                                    <td>{{ $department->id }}</td>
+                                    <td>{{ $department->name }}</td>
                                     <td>
-                                        <button class="showModalDepartment" data-id ="{{ $ds->id }}">Sửa</button>
-                                        <a href="{{ route('department.show',$ds->id) }}"><button class="show">Danh sách
+                                        <button class="showModalDepartment" data-id ="{{ $department->id }}">Sửa</button>
+                                        <a href="{{ route('department.show',$department->id) }}"><button class="show">Danh sách
                                         </button></a>
                                         <meta name="csrf-token" content="{{ csrf_token() }}">
-                                        <button class="delete_department" data-id="{{ $ds->id }}" >Xóa</button>
+                                        <button class="delete_department" data-id="{{ $department->id }}" >Xóa</button>
                                     </td>
                                 </tr>
                             @endforeach

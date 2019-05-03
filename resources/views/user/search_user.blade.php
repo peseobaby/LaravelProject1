@@ -10,7 +10,7 @@
         <td>
             <button class="showModal" data-toggle="modal" data-id ="{{ $user->id }}">Sửa</button>
             <meta name="csrf-token" content="{{ csrf_token() }}">
-            <button class="delete" data-id="{{ $user->id }}" >Xóa</button>
+            <button class="delete" data-delete-id="{{ $user->id }}" >Xóa</button>
         </td>
     </tr>
 @endforeach

@@ -24,13 +24,13 @@
                                         <td>Email</td>
                                         <td>Options</td>
                                     </tr>
-                                @foreach($danhsach as $ds)
+                                @foreach($users as $user)
                                     <tr>
-                                        <td>{{ $ds->id }}</td>
-                                        <td>{{ $ds->name }}</td>
-                                        <td>{{ $ds->email }}</td>
+                                        <td>{{ $user->id }}</td>
+                                        <td>{{ $user->name }}</td>
+                                        <td>{{ $user->email }}</td>
                                         <td>
-                                            <input type="checkbox" name="box[]" value="{{ $ds->id }}" ><br/>   
+                                            <input type="checkbox" name="box[]" value="{{ $user->id }}" ><br/>
                                         </td>
                                     </tr>
                                 @endforeach

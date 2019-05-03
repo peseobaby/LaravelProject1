@@ -26,14 +26,21 @@ class AddRequest extends FormRequest
     public function rules()
     {
         session()->put('user_id', request()->get('id'));
-        return [
+        $request = Request();
+        $id = $request->id;
+        $result = [
             'name' => 'bail|required|',
-            'email' => 'bail|required|email',
             'age' => 'required',
             'address' => 'required',
-            'level' => 'required_without_all',
-            'department' => 'required_without_all',
+            'level_id' => 'required_without_all',
+            'department_id' => 'required_without_all',
         ];
+        if($id != null) {
+            $result['email'] = 'bail|required|email|';
+        } else {
+            $result['email'] = 'bail|required|email|unique:users,email';
+        }
+        return $result;
     }
     
     public function messages()
@@ -44,8 +51,8 @@ class AddRequest extends FormRequest
             'email.email' => 'Email phải có định dạng @abc',
             'age.required' => ' Điền tuổi',
             'address.required' => 'Địa chỉ không được để trống',
-            'level.required_without_all' => 'Chọn 1',
-            'department.required_without_all' => 'Chọn 1',
+            'level_id.required_without_all' => 'Chọn chức vụ',
+            'department_id.required_without_all' => 'Chọn phòng ban',
         ];
     }
 }

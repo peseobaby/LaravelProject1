@@ -10,4 +10,9 @@ class Level extends Model
     {
         return Level::get('name');
     }
+
+    public static function getLevelUser()
+    {
+        return Level::where('name', '<>', 'admin')->get();
+    }
 }

@@ -33,19 +33,19 @@
                                 </tr>
                             </thead>
                             <tbody id="tbody">
-                                @foreach($danhsach as $ds)
+                                @foreach($users as $user)
                                     <tr>
-                                        <td>{{ $ds->id }}</td>
-                                        <td>{{ $ds->name }}</td>
-                                        <td>{{ $ds->email }}</td>
-                                        <td>{{ $ds->age }}</td>
-                                        <td>{{ $ds->address }}</td>
-                                        <td>{{ $ds->level->name }}</td>
-                                        <td>{{ $ds->department->name }}</td>
+                                        <td>{{ $user->id }}</td>
+                                        <td>{{ $user->name }}</td>
+                                        <td>{{ $user->email }}</td>
+                                        <td>{{ $user->age }}</td>
+                                        <td>{{ $user->address }}</td>
+                                        <td>{{ $user->level->name }}</td>
+                                        <td>{{ $user->department->name }}</td>
                                         <td>
-                                            <button class="showModal" data-toggle="modal" data-id ="{{ $ds->id }}">Sửa</button>
+                                            <button class="showModal" data-toggle="modal" data-id ="{{ $user->id }}">Sửa</button>
                                             <meta name="csrf-token" content="{{ csrf_token() }}">
-                                            <button class="delete" data-delete-id="{{ $ds->id }}" >Xóa</button>
+                                            <button class="delete" data-delete-id="{{ $user->id }}" >Xóa</button>
                                         </td>
                                     </tr>
                                 @endforeach

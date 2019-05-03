@@ -8,6 +8,7 @@
             </div>
             <div class="modal-body">
                 <div class="content">
+                    <div class="alert alert-danger" style="display: none"></div>
                     <form method="post" action="{{ route('department.post') }}" role="form">
                         {{ csrf_field() }}
 
@@ -25,7 +26,7 @@
                             </tr>
                             <tr>
                                 <td></td>
-                                <td><button type="submit" class="button">Submit</button></td>
+                                <td><button type="submit" id="departmentAdd">Submit</button></td>
                             </tr>
                         </table>
                     </form>

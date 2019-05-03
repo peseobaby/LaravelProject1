@@ -1,10 +1,10 @@
-@foreach($departments as $department)
+@foreach($users as $user)
     <tr>
-        <td>{{ $department->id }}</td>
-        <td>{{ $department->name }}</td>
-        <td>{{ $department->email }}</td>
-        <td>{{ $department->age }}</td>
-        <td>{{ $department->address }}</td>
-        <td>{{ $department->level->name }}</td>
+        <td>{{ $user->id }}</td>
+        <td>{{ $user->name }}</td>
+        <td>{{ $user->email }}</td>
+        <td>{{ $user->age }}</td>
+        <td>{{ $user->address }}</td>
+        <td>{{ $user->level->name }}</td>
     </tr>
 @endforeach

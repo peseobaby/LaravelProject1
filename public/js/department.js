@@ -33,7 +33,31 @@ $(document).ready(function() {
                 $("#departmentModal").modal("show");
                 errors = [];
             },
-
+        });
+    });
+    //post Modal
+    $(document).on("click", "#departmentAdd", function(e){
+        e.preventDefault();
+        $.ajax({
+            url: 'department/post',
+            type: 'POST',
+            data: $('form').serialize(),
+                  // errors,
+            success:function(data){
+                $("#tbody1").empty();
+                $("#tbody1").html(data);
+                $("#departmentModal").modal("hide");
+            },
+            error: function(jqXhr, json, errorThrown){
+                var errors = jqXhr.responseJSON.errors;
+                if(errors) {
+                    $('.alert-danger').html('');
+                    $.each(errors, function(key, value){
+                            $('.alert-danger').show();
+                            $('.alert-danger').append('<li>'+value+'</li>');
+                    });
+                }
+            }
         });
     });
 //validate
@@ -60,4 +84,6 @@ $(document).ready(function() {
             });
         }
     });
+
+    
 });

@@ -18,17 +18,18 @@
                                     <td>Chức vụ</td>
                                     <td>Phòng ban</td>
                                 </tr>
-                            @foreach($danhsach as $ds)
+                            @foreach($staffs as $staff)
                                 <tr>
-                                    <td>{{ $ds->name }}</td>
-                                    <td>{{ $ds->email }}</td>
-                                    <td>{{ $ds->age }}</td>
-                                    <td>{{ $ds->address }}</td>
-                                    <td>{{ $ds->level->name }}</td>
-                                    <td>{{ $ds->department->name }}</td>
+                                    <td>{{ $staff->name }}</td>
+                                    <td>{{ $staff->email }}</td>
+                                    <td>{{ $staff->age }}</td>
+                                    <td>{{ $staff->address }}</td>
+                                    <td>{{ $staff->level->name }}</td>
+                                    <td>{{ $staff->department->name }}</td>
                                 </tr>
-                            @endforeach                                      
+                            @endforeach
                         </table>
+                        <br></br>
                         <button><a href="{{ route('export', $id) }}">Xuất danh sách</a></button>
                     </div>
                 </div>

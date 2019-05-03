@@ -1,14 +1,14 @@
-@foreach($departments as $ds)
+@foreach($departments as $department)
     <tr>
-        <td>{{ $ds->id }}</td>
-        <td>{{ $ds->name }}</td>
+        <td>{{ $department->id }}</td>
+        <td>{{ $department->name }}</td>
         <td>
-            <button class="edit" data-toggle="modal" data-target="#departmentModal" data-id ="{{ $ds->id }}" data-name = "{{ $ds->name }}" >Sửa</button>
-            <a href="{{ route('department.show',$ds->id) }}"><button class="show">Danh sách
+            <button class="edit" data-toggle="modal" data-target="#departmentModal" data-id ="{{ $department->id }}" data-name = "{{ $department->name }}" >Sửa</button>
+            <a href="{{ route('department.show', $department->id) }}"><button class="show">Danh sách
             </button>
             </a>
             <meta name="csrf-token" content="{{ csrf_token() }}">
-            <button class="delete_department" data-id="{{ $ds->id }}" >Xóa</button>
+            <button class="delete_department" data-id="{{ $department->id }}" >Xóa</button>
         </td>
     </tr>
 @endforeach

@@ -26,14 +26,14 @@
                                 </tr>
                             </thead>
                             <tbody id="tbody2">
-                                @foreach($danhsach as $ds)
+                                @foreach($users as $user)
                                     <tr>
-                                        <td>{{ $ds->id }}</td>
-                                        <td>{{ $ds->name }}</td>
-                                        <td>{{ $ds->email }}</td>
-                                        <td>{{ $ds->age }}</td>
-                                        <td>{{ $ds->address }}</td>
-                                        <td>{{ $ds->level->name }}</td>
+                                        <td>{{ $user->id }}</td>
+                                        <td>{{ $user->name }}</td>
+                                        <td>{{ $user->email }}</td>
+                                        <td>{{ $user->age }}</td>
+                                        <td>{{ $user->address }}</td>
+                                        <td>{{ $user->level->name }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
