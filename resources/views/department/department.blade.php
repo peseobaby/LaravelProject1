@@ -52,6 +52,7 @@
     errors = @json($errors->getMessages());
     department_id =  {{ session()->has('department_id') ? session()->get('department_id') : 0 }};
 </script>
+<script src="{{ asset('/js/module.js') }}"></script>
 <script src="{{ asset('/js/department.js') }}">
 </script>
 <style>

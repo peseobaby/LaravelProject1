@@ -6,15 +6,15 @@
             <div class="card">
                 <div class="card-header">Admin Dashboard</div>
                 <div class="card-body">
-                    @if (session('status'))
+                    @if (session('alert'))
                         <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
+                            {{ session('alert') }}
                         </div>
                     @endif
                     <div class="content">
                         <h1>Reset Password</h1>
                         <a href="{{ route('home') }}">trở về</a>
-                        <form action="{{ route('resetpassword') }}" method="post">
+                        <form action="{{ route('reset.password') }}" method="post">
                             {{ csrf_field() }}
                             {{ method_field('post') }}
                             <table width="100%" border="1" cellspacing="0" cellpadding="10">

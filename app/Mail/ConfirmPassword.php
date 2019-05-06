@@ -13,16 +13,14 @@ class ConfirmPassword extends Mailable
 {
     use Queueable, SerializesModels;
     protected $userid;
-    protected $userPassword;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($userid, $userPassword)
+    public function __construct($userid)
     {
         $this->userid = $userid;
-        $this->userPassword = $userPassword;
     }
 
     /**
@@ -32,6 +30,6 @@ class ConfirmPassword extends Mailable
      */
     public function build()
     {
-        return $this->view('mail', ['user' => $this->userid, 'password' => $this->userPassword]);
+        return $this->view('mail', ['user' => $this->userid]);
     }
 }

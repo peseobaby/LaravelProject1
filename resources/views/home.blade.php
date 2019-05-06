@@ -65,6 +65,7 @@
         user_id =  {{ session()->has('user_id') ? session()->get('user_id') : 0 }};
     });
 </script>
+<script src="{{ asset('/js/module.js') }}"></script>
 <script src="{{ asset('/js/user.js') }}"></script>
 <style>
     #search {

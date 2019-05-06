@@ -50,96 +50,14 @@ class User extends Authenticatable
         return $this->hasOne('App\Department', 'id', 'department_id');
     }
 
-    public function getAll()
-    {
-        return User::get();
-    }
-
     public function scopeWhereUserDepartment($query, $id)
     {
         return $query->with('level', 'department')
             ->where('department_id', $id);
     }
 
-    public static function search($strquery, $query)
+    public function scopeWithOutAdmin($query)
     {
-        if($strquery) {
-            $query->where('name', 'like', '%'.$strquery.'%');
-            }
-            return $query->get();
-    }
-
-    public static function searchUser($strquery)
-    {
-        $query = User::with('level', 'department')->where('level_id', '<>', ADMIN);
-        return User::search($strquery, $query);
-    }
-
-    public static function searchUserDepartment($strquery, $department_id)
-    {
-        $query = User::whereUserDepartment($department_id);
-        return User::search($strquery, $query);
-    }
-
-    public static function getUser()
-    {
-        return User::with('level', 'department')->where('level_id', '<>', ADMIN)
-                ->get();
-    }
-
-    public static function resetPasswordUser($id)
-    {
-        $user = User::find($id);
-        $user->password = bcrypt(DEFAULT_PASSWORD);
-        $user->new = '0';
-        $user->save();
-        return $user;
-    }
-
-    public static function updateInfor($data, $id)
-    {
-        $user = User::find($id);
-        $user->name = $data['name'];
-        $user->age = $data['age'];
-        $user->address = $data['address'];
-        $user->save();
-        return $user;
-    }
-
-    public static function deleteUser($id)
-    {
-        $user = User::where('id', $id)->delete();
-        $users = User::getUser();
-        return $users;
-    }
-
-    public static function getStaff($id)
-    {
-        $user = User::find($id);
-        $department_id = $user->department_id;
-        $level_id = $user->level_id;
-        $staffs = User::with('level', 'department')
-                        ->where('department_id', $department_id)
-                        ->where('level_id', '>', $level_id)->get();
-        return $staffs;
-    }
-
-    public static function changePassword($request, $id)
-    {
-        $user = User::find($id);
-        $user->password = bcrypt($request->password);
-        $user->new = CHECKED;
-        $user->save();
-        return $user;
-    }
-
-    public static function createOrUpdateUser($request)
-    {
-        $data = $request->all();
-        unset($data['_token']);
-        if(!$data['id']) {
-            $data['password'] = bcrypt(DEFAULT_PASSWORD);
-        }
-        User::updateOrCreate(['id' => $data['id']], $data);
+        return $query->with('level', 'department')->where('level_id', '<>', ADMIN);
     }
 }

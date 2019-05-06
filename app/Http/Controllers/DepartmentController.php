@@ -4,25 +4,35 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Department;
+use App\Repositories\UserRepository;
+use App\Repositories\DepartmentRepository;
 use Validator;
 use App\Http\Requests\DepartmentRequest;
 use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
 {
-    
+    protected $department;
+    protected $user;
+
+    public function __construct(DepartmentRepository $department, UserRepository $user)
+    {
+        $this->department = $department;
+        $this->user = $user;
+    }
 
     public function index()
     {
-        $departments = Department::all();
+        $departments = $this->department->getAll();
         return view('department.department', compact('departments'));
     }
 
     public function destroy(Request $request, $id)
     {
-       $departments = Department::deleteDepartment($id);
+        $department = $this->department->delete($id);
+        $departments = $this->department->getAll();
         return view('department.search_department',
-                    compact('departments'))->with('alert', 'Đã xóa phòng ban');
+                    compact('departments'));
     }
 
     public function showDepartment(Request $request, $id)
@@ -32,11 +42,11 @@ class DepartmentController extends Controller
         return view('department.department_show', compact('department', 'users'));
     }
 
-    public function action(Request $request)
+    public function search(Request $request)
     {
         if ($request->ajax()) {
             $query = $request->get('query');
-            $departments = Department::searchDepartment($query);
+            $departments = $this->department->search($query);
             return view('department.search_department',
                         compact('departments'));
         };
@@ -50,13 +60,13 @@ class DepartmentController extends Controller
             $department = Department::find($id);
         };
         return view('department.modal_department',
-                    compact('department'))->withErrors($errors);
+                    compact('department'));
     }
 
-    public function post(DepartmentRequest $request)
+    public function store(DepartmentRequest $request)
     {
-        $department = Department::postDepartment($request);
-        $departments = Department::getAll();
+        $department = $this->department->store($request);
+        $departments = $this->department->getAll();
         return view('department.search_department', compact('departments'));
     }
 
@@ -64,7 +74,7 @@ class DepartmentController extends Controller
     {
         if ($request->ajax()) {
             $query = $request->get('query');
-            $users = User::searchUserDepartment($query, $id);
+            $users = $this->user->searchUserDepartment($query, $id);
             return view('department.search_department_user',
                         compact('users'));
         }

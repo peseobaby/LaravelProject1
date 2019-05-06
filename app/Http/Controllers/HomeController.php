@@ -12,6 +12,9 @@ use App\Http\Requests\AddRequest;
 use App\Http\Requests\UpdateRequest;
 use App\Http\Requests\PasswordRequest;
 use App\Http\Requests\UpdateInforRequest;
+use App\Repositories\UserRepository;
+use App\Repositories\LevelRepository;
+use App\Repositories\DepartmentRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -23,9 +26,16 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    protected $user;
+    protected $level;
+    protected $department;
+
+    public function __construct(UserRepository $user, LevelRepository $level, DepartmentRepository $department)
     {
         $this->middleware('auth');
+        $this->user = $user;
+        $this->level = $level;
+        $this->department = $department;
     }
 
     /**
@@ -35,7 +45,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $users = User::getUser();
+        $users =  $this->user->getUser();
         return view('home', compact('users'));
     }
 
@@ -47,26 +57,27 @@ class HomeController extends Controller
 
     public function destroy(Request $request, $id)
     {
-       $users = User::deleteUser($id);
+       $user = $this->user->delete($id);
+       $users = $this->user->getUser();
         return view('user.search_user',
-                    compact('users'))->with('alert', 'Đã xóa phòng ban');
+                    compact('users'));
     }
 
     public function resetForm()
     {
-        $users = User::getUser();
+        $users = $this->user->getUser();
         return view('user.reset_password', compact('users'));
     }
 
-    public function resetPassword(PasswordRequest $request)
+    public function resetPassword(Request $request)
     {
         $ids = $request->all();
         foreach ($ids['box'] as $id ) {
-            $user = User::resetPasswordUser($id);
+            $user = $this->user->resetPassword($id);
             \Mail::to($user->email)
-            ->send(new ConfirmPassword($user, $userPassword));
+            ->send(new ConfirmPassword($user));
         }
-        return redirect()->route('resetpassword')
+        return redirect()->route('form.reset')
                          ->with('alert', 'Reset mật khẩu thành công');
     }
 
@@ -79,14 +90,14 @@ class HomeController extends Controller
     public function updateInfor(UpdateInforRequest $request, $id)
     {
         $data = $request->all();
-        $user = User::updateInfor($data, $id);
+        $user = $this->user->updateInfor($data, $id);
         return redirect()->route('user.show', $id)
                          ->with('alert', 'Đã cập nhật');
     }
 
     public function showStaff($id)
     {
-        $staffs = User::getStaff($id);
+        $staffs = $this->user->getStaff($id);
         return view('user.staff', compact('id', 'staffs'));
     }
 
@@ -98,7 +109,7 @@ class HomeController extends Controller
 
     public function changePassword(passwordRequest $request, $id)
     {
-        $user = User::changePassword($request, $id);
+        $user = $this->user->changePassword($request, $id);
         return redirect('login')->with('alert', 'Đổi mật khẩu thành công');
     }
 
@@ -107,11 +118,11 @@ class HomeController extends Controller
         return Excel::download(new UsersExport, 'user.xlsx');
     }
 
-    public function action(Request $request)
+    public function search(Request $request)
     {
         if ($request->ajax()) {
             $query = $request->get('query');
-            $users = User::searchUser($query);
+            $users = $this->user->searchUser($query);
             return view('user.search_user', compact('users'));
         }
     }
@@ -123,16 +134,16 @@ class HomeController extends Controller
         } else {
             $user = User::find($id);
         };
-        $departments = Department::all();
-        $levels = Level::getLevelUser();
+        $departments = $this->department->getAll();
+        $levels = $this->level->getLevel();
         return view('user.modal_user_edit',
                 compact('user', 'departments', 'levels'));
     }
 
-    public function post(AddRequest $request)
+    public function store(AddRequest $request)
     {
-        $user = User::createOrUpdateUser($request);
-        $users = User::getUser();
+        $user = $this->user->store($request);
+        $users = $this->user->getUser();
         return view('user.search_user', compact('users'));
     }
 }
