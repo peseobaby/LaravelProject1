@@ -22,6 +22,17 @@ class DepartmentRepository
     {
         return $this->department->all();
     }
+
+    public function find($id)
+    {
+        return $this->department->find($id);
+    }
+
+    public function new($id)
+    {
+        return new Department;
+    }
+
     public function delete($id)
     {
         $department = $this->department->where('id', $id)->delete();
@@ -36,9 +47,8 @@ class DepartmentRepository
         return $this->getAll();
     }
 
-    public function store($request)
+    public function store($id, $data)
     {
-        $data = $request->all();
-        return $this->department->updateOrCreate(['id' => $data['id']], $data);
+        return $this->department->updateOrCreate(['id' =>$id], $data);
     }
 }

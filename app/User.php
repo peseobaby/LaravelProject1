@@ -42,12 +42,12 @@ class User extends Authenticatable
 
     public function level()
     {
-        return $this->hasOne('App\Level', 'id', 'level_id');
+        return $this->hasOne(Level::class, 'id', 'level_id');
     }
 
     public function department()
     {
-        return $this->hasOne('App\Department', 'id', 'department_id');
+        return $this->hasOne(Department::class, 'id', 'department_id');
     }
 
     public function scopeWhereUserDepartment($query, $id)

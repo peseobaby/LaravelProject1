@@ -20,6 +20,16 @@ class UserRepository
         return $this->user->WithOutAdmin()->get();
     }
 
+    public function find($id)
+    {
+        return $this->user->find($id);
+    }
+
+    public function new()
+    {
+        return new User;
+    }
+
     public function search($strquery, $query)
     {
         if($strquery) {
@@ -34,60 +44,38 @@ class UserRepository
         return $this->search($strquery, $query);
     }
 
+
     public function searchUserDepartment($strquery, $department_id)
     {
         $query = $this->user->whereUserDepartment($department_id);
         return $this->search($strquery, $query);
     }
 
-    public function resetPassword($id)
+    public function update($id, $data)
     {
-        $user = $this->user->find($id);
-        $user->password = bcrypt(DEFAULT_PASSWORD);
-        $user->new = NEW_USER;
-        $user->save();
-        return $user;
+        return $this->user->find($id)->update($data);
     }
 
     public function delete($id)
     {
-        $user = $this->user->where('id', $id)->delete();
-        return $this->getUser();
-    }
-
-    public function updateInfor($data, $id)
-    {
-        $user = $this->user->find($id);
-        $user->name = $data['name'];
-        $user->age = $data['age'];
-        $user->address = $data['address'];
-        $user->save();
-        return $user;
+        return $this->user->find($id)->delete();
     }
 
     public function getStaff($id)
     {
         $user = $this->user->find($id);
-        return User::with('level', 'department')
+        return $this->user->with('level', 'department')
                         ->where('department_id', $user->department_id)
                         ->where('level_id', '>', $user->level_id)->get();
     }
 
-    public function changePassword($request, $id)
+    public function getUserDepartment($id)
     {
-        $user = $this->user->find($id);
-        $user->password = bcrypt($request->password);
-        $user->new = CHECKED;
-        $user->save();
-        return $user;
+        return User::WhereUserDepartment($id)->get();
     }
 
-    public function store($request)
+    public function store($id, $data)
     {
-        $data = $request->all();
-        if(!$data['id']) {
-            $data['password'] = bcrypt(DEFAULT_PASSWORD);
-        }
-        $this->user->updateOrCreate(['id' => $data['id']], $data);
+        $this->user->updateOrCreate(['id' => $id], $data);
     }
 }
